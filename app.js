@@ -25,7 +25,9 @@ app.get('/', function(req, res) {
 
             const page = await browser.newPage();
             await page.goto(urlToScreenshot);
-            await page.waitForSelector('#download-button');                 
+            await page.waitForNavigation({
+               waitUntil: 'networkidle0',
+                                      });             
             await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
                 res.setHeader('Content-Type', 'image/png');
