@@ -13,6 +13,27 @@ var parseUrl = function(url) {
     return url;
 };
 
+
+async function autoScroll(page){
+    await page.evaluate(async () => {
+        await new Promise((resolve, reject) => {
+            var totalHeight = 0;
+            var distance = 100;
+            var timer = setInterval(() => {
+                var scrollHeight = document.body.scrollHeight;
+                window.scrollBy(0, distance);
+                totalHeight += distance;
+
+                if(totalHeight >= scrollHeight - window.innerHeight){
+                    clearInterval(timer);
+                    resolve();
+                }
+            }, 100);
+        });
+    });
+}
+
+
 app.get('/', function(req, res) {
     var urlToScreenshot = parseUrl(req.query.url);
 
@@ -22,9 +43,14 @@ app.get('/', function(req, res) {
             const browser = await puppeteer.launch({
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
-
+             
             const page = await browser.newPage();
             await page.goto(urlToScreenshot);
+            await page.setViewport({
+            width: 1200,
+            height: 800
+                });   
+            await autoScroll(page);
             await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
                 res.setHeader('Content-Type', 'image/png');
