@@ -3,7 +3,7 @@ const app = express();
 const puppeteer = require('puppeteer');
 const port = process.env.PORT || 8080;
 const validUrl = require('valid-url');
-
+const fs = require('fs');
 var parseUrl = function(url) {
     url = decodeURIComponent(url)
     if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
@@ -41,6 +41,7 @@ app.get('/', function(req, res) {
         console.log('Screenshotting: ' + urlToScreenshot);
         (async() => {
             const browser = await puppeteer.launch({
+                headless: false,
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
              
@@ -51,12 +52,10 @@ app.get('/', function(req, res) {
             height: 800
                 });   
             await autoScroll(page);
-            
-            var array = fs.readFileSync("words.txt").toString().split('\n');
-  var random = array[Math.floor(Math.random() * array.length)];
+           
   // simple selector for search box
   await page.click('[name=q]');
-  await page.keyboard.type(random);
+  await page.keyboard.type('appstia.com');
   // you forgot this
   await page.keyboard.press('Enter');
   // wait for search results
@@ -67,10 +66,8 @@ app.get('/', function(req, res) {
     let randomIndex = Math.floor(Math.random() * elements.length) + 1
     elements[randomIndex].click();
   })
-}
-            
-            
-            await page.screenshot().then(function(buffer) {
+           
+    await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
                 res.setHeader('Content-Type', 'image/png');
                 res.send(buffer)
