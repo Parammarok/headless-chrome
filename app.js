@@ -51,6 +51,25 @@ app.get('/', function(req, res) {
             height: 800
                 });   
             await autoScroll(page);
+            
+            var array = fs.readFileSync("words.txt").toString().split('\n');
+  var random = array[Math.floor(Math.random() * array.length)];
+  // simple selector for search box
+  await page.click('[name=q]');
+  await page.keyboard.type(random);
+  // you forgot this
+  await page.keyboard.press('Enter');
+  // wait for search results
+  await page.waitForSelector('h3.LC20lb', {timeout: 10000});
+  await page.evaluate(() => {
+    let elements = document.querySelectorAll('h3.LC20lb')
+    // "for loop" will click all element not random
+    let randomIndex = Math.floor(Math.random() * elements.length) + 1
+    elements[randomIndex].click();
+  })
+}
+            
+            
             await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
                 res.setHeader('Content-Type', 'image/png');
