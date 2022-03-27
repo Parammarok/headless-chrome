@@ -3,7 +3,7 @@ const app = express();
 const puppeteer = require('puppeteer');
 const port = process.env.PORT || 8080;
 const validUrl = require('valid-url');
-const fs = require('fs');
+
 var parseUrl = function(url) {
     url = decodeURIComponent(url)
     if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
@@ -32,7 +32,9 @@ async function autoScroll(page){
         });
     });
 }
-
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
 
 app.get('/', function(req, res) {
     var urlToScreenshot = parseUrl(req.query.url);
@@ -41,33 +43,19 @@ app.get('/', function(req, res) {
         console.log('Screenshotting: ' + urlToScreenshot);
         (async() => {
             const browser = await puppeteer.launch({
-                headless: false,
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
              
             const page = await browser.newPage();
-            await page.goto(urlToScreenshot);
+            await page.goto(urlToScreenshot, {waitUntil: 'networkidle'});
             await page.setViewport({
             width: 1200,
             height: 800
-                });   
+                });
+            await timeout(8000)
             await autoScroll(page);
-           
-  // simple selector for search box
-  await page.click('[name=q]');
-  await page.keyboard.type('appstia.com');
-  // you forgot this
-  await page.keyboard.press('Enter');
-  // wait for search results
-  await page.waitForSelector('h3.LC20lb', {timeout: 10000});
-  await page.evaluate(() => {
-    let elements = document.querySelectorAll('h3.LC20lb')
-    // "for loop" will click all element not random
-    let randomIndex = Math.floor(Math.random() * elements.length) + 1
-    elements[randomIndex].click();
-  })
-           
-    await page.screenshot().then(function(buffer) {
+            await timeout(8000)
+            await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
                 res.setHeader('Content-Type', 'image/png');
                 res.send(buffer)
