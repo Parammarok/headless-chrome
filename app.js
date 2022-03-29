@@ -30,10 +30,6 @@ app.get('/', function(req, res) {
             console.log('Wating 15 Seconds');
             const page = await browser.newPage();
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
-            await page.setViewport({
-            width: 1200,
-            height: 800
-                });   
             await timeout(15000)
             await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
