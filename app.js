@@ -50,7 +50,7 @@ app.get('/', function(req, res) {
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
             await page.setViewport({
             width: 800,
-            height: 1980
+            height: 1280
                 });  
             await timeout(20000)
             await page.screenshot().then(function(buffer) {
