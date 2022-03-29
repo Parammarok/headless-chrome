@@ -45,12 +45,13 @@ app.get('/', function(req, res) {
             const browser = await puppeteer.launch({
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
-             await page.setViewport({
-            width: 800,
-            height: 1980
-                });
+            
             const page = await browser.newPage();
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
+            await page.setViewport({
+            width: 800,
+            height: 1980
+                });  
             await timeout(20000)
             await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
