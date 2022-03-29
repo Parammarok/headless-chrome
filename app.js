@@ -45,7 +45,10 @@ app.get('/', function(req, res) {
             const browser = await puppeteer.launch({
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
-             
+             await page.setViewport({
+            width: 800,
+            height: 1980
+                });
             const page = await browser.newPage();
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
             await timeout(20000)
