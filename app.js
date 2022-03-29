@@ -52,9 +52,9 @@ app.get('/', function(req, res) {
             width: 1200,
             height: 800
                 });
-            await timeout(8000)
+            await timeout(5000)
             await autoScroll(page);
-            await timeout(8000)
+            await timeout(5000)
             await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
                 res.setHeader('Content-Type', 'image/png');
