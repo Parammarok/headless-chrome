@@ -25,27 +25,23 @@ app.get('/', function(req, res) {
         console.log('Screenshotting: ' + urlToScreenshot);
         (async() => {
             const browser = await puppeteer.launch({
+                headless:true,
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
             const page = await browser.newPage();
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
-            await page.setViewport({
-            width: 1200,
-            height: 800
-                });   
-            await Promise.all([ await page.click("#F1 > button") ]);
             await page.$eval('#F1 > button', elem => elem.click());
-            await page.waitForNavigation({waitUntil: 'networkidle2'});
-            const html = await page.content();
+            await page.waitForNavigation();
+            const html = await page.content({waitUntil: 'networkidle2'});
             console.log(html);
-         ////   res.send(html);
+            res.send(html);
             
+             ////await page.screenshot().then(function(buffer) {
+            ////  res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
+             ////  res.setHeader('Content-Type', 'image/png');
+              //// res.send(buffer)
+            ///});
             
-             await page.screenshot().then(function(buffer) {
-                res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
-                res.setHeader('Content-Type', 'image/png');
-                res.send(buffer)
-            });
             
             await browser.close();
         })();
@@ -57,4 +53,5 @@ app.get('/', function(req, res) {
 
 app.listen(port, function() {
     console.log('App listening on port ' + port)
-})
+});   
+                     
