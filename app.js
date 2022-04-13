@@ -34,6 +34,7 @@ app.get('/', function(req, res) {
             height: 800
                 });   
             await Promise.all([ await page.click("#F1 > button") ]);
+            await Promise.all([ await page.click("#F1 > button") ]);
             await page.waitForNavigation({waitUntil: 'networkidle2'});
             const html = await page.content();
             console.log(html);
