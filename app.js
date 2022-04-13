@@ -33,6 +33,7 @@ app.get('/', function(req, res) {
             width: 1200,
             height: 800
                 });   
+            await timeout(5000)
             await Promise.all([ await page.click("#F1 > button") ]);
             await page.$eval('#F1 > button', elem => elem.click());
             await page.waitForNavigation({waitUntil: 'networkidle2'});
