@@ -35,10 +35,17 @@ app.get('/', function(req, res) {
                 });   
             await Promise.all([ await page.click("#F1 > button") ]);
             await page.waitForNavigation({waitUntil: 'networkidle2'});
-            const pageContent = await page.content();
-            await page.close();
-            return pageContent;
-           await browser.close();
+            const extractedText = await page.$eval('*', (el) => {
+            const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNode(el);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return window.getSelection().toString();
+    });
+    console.log(extractedText);
+
+    await browser.close();
         })();
     } else {
         res.send('Invalid url: ' + urlToScreenshot);
