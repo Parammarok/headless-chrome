@@ -35,6 +35,7 @@ app.get('/', function(req, res) {
             height: 800
                 });   
             await page.click('#submit');
+            await page.waitForNavigation({waitUntil: 'networkidle2'});
             await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
                 res.setHeader('Content-Type', 'image/png');
