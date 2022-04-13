@@ -29,14 +29,9 @@ app.get('/', function(req, res) {
             });
             const page = await browser.newPage();
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
-            await page.setViewport({
-            width: 1200,
-            height: 800
-                });   
-            await Promise.all([ await page.click("#F1 > button") ]);
+            omise.all([ await page.click("#F1 > button") ]);
             await page.waitForNavigation({waitUntil: 'networkidle2'});
             const html = await page.content();
-            console.log(html);
             res.send(html);
             await browser.close();
         })();
