@@ -25,14 +25,19 @@ app.get('/', function(req, res) {
         console.log('Screenshotting: ' + urlToScreenshot);
         (async() => {
             const browser = await puppeteer.launch({
-                headless: true,
+                headless:true,
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
             const page = await browser.newPage();
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
-            omise.all([ await page.click("#F1 > button") ]);
+            await page.setViewport({
+            width: 1200,
+            height: 800
+                });   
+            await Promise.all([ await page.click("#F1 > button") ]);
             await page.waitForNavigation();
             const html = await page.content();
+            console.log(html);
             res.send(html);
             await browser.close();
         })();
