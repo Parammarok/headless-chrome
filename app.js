@@ -27,7 +27,6 @@ app.get('/', function(req, res) {
             const browser = await puppeteer.launch({
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
-            console.log('Wating 15 Seconds');
             const page = await browser.newPage();
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
             await page.setViewport({
@@ -36,13 +35,10 @@ app.get('/', function(req, res) {
                 });   
             await Promise.all([ await page.click("#F1 > button") ]);
             await page.waitForNavigation({waitUntil: 'networkidle2'});
-            await page.screenshot().then(function(buffer) {
-                res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
-                res.setHeader('Content-Type', 'image/png');
-                res.send(buffer)
-            });
-
-            await browser.close();
+            const pageContent = await page.content();
+            await page.close();
+            return pageContent;
+           await browser.close();
         })();
     } else {
         res.send('Invalid url: ' + urlToScreenshot);
