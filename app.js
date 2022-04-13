@@ -32,7 +32,7 @@ app.get('/', function(req, res) {
             await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
             await Promise.all([ await page.click("#F1 > button") ]);
             await page.waitForNavigation();
-            const html = await page.content();
+            const html = await page.content({waitUntil: 'networkidle2'});
             console.log(html);
             res.send(html);
             await browser.close();
