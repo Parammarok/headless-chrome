@@ -37,7 +37,7 @@ app.get('/', function(req, res) {
             await page.waitForNavigation({waitUntil: 'networkidle2'});
             const html = await page.content();
             console.log(html);
-            
+            res.send(html);
             await browser.close();
         })();
     } else {
