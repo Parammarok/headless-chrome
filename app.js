@@ -36,7 +36,8 @@ app.get('/', function(req, res) {
             await Promise.all([ await page.click("#F1 > button") ]);
             await page.waitForNavigation({waitUntil: 'networkidle2'});
             const html = await page.content();
-            fs.writeFileSync("index.html", html);
+            console.log(html);
+            
             await browser.close();
         })();
     } else {
