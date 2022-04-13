@@ -34,7 +34,7 @@ app.get('/', function(req, res) {
             width: 1200,
             height: 800
                 });   
-            await timeout(15000)
+            await page.click('#submit');
             await page.screenshot().then(function(buffer) {
                 res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
                 res.setHeader('Content-Type', 'image/png');
