@@ -35,12 +35,17 @@ app.get('/', function(req, res) {
                 });   
             
             await page.$eval('#F1 > button', elem => elem.click());
-            await timeout(5000)
-            await page.$eval('#F1 > button', elem => elem.click());
+            await timeout(5000);
+           
             await page.waitForNavigation({waitUntil: 'networkidle2'});
+            await page.screenshot().then(function(buffer) {
+                res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
+                res.setHeader('Content-Type', 'image/png');
+                res.send(buffer)
+            });
             const html = await page.content();
             console.log(html);
-            res.send(html);
+            //res.send(html);
             await browser.close();
         })();
     } else {
