@@ -33,9 +33,11 @@ app.get('/', function(req, res) {
             width: 1200,
             height: 800
                 });   
+            await timeout(1000);
             
-            await page.$eval('#F1 > button', elem => elem.click());
-            await timeout(5000);
+           await page.evaluate(() => {
+  [...document.querySelectorAll('.elements button')].find(element => element.textContent === 'Download Video').click();
+});
            
             await page.waitForNavigation({waitUntil: 'networkidle2'});
             await page.screenshot().then(function(buffer) {
