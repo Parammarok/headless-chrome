@@ -32,8 +32,7 @@ app.get('/', function(req, res) {
 			if ( mode == 'res')  {
              const html = await page.content();
             console.log(html);
-           res.send(html); } 
-            
+            res.send(html); 
             await browser.close();
 		   } else {
 		await page.evaluate(() => document.querySelector("#F1 > button").click());
