@@ -30,31 +30,17 @@ app.get('/', function(req, res) {
 			
 			
 			if ( mode == 'res')  {
-          const html = await page.content();
+             const html = await page.content();
             console.log(html);
            res.send(html); } 
             
             await browser.close();
-		   } 
-			
-			
-          
-			if ( mode == 's')  {
-           await page.screenshot().then(function(buffer) {
-                res.setHeader('Content-Disposition', 'attachment;filename="' + urlToScreenshot + '.png"');
-              res.setHeader('Content-Type', 'image/png');
-               res.send(buffer)		  		   
-           }); 
-		     const html = await page.content();
-            console.log(html);
 		   } else {
-			await page.evaluate(() => document.querySelector("#F1 > button").click());
-		   await page.$x('//*[@id="F1"]/button')
-		   const elements = await page.$x('//*[@id="F1"]/button')
-           await elements[0].click() 
-
-			
-			await page.waitForNavigation({waitUntil: 'networkidle2'});
+		await page.evaluate(() => document.querySelector("#F1 > button").click());
+		await page.$x('//*[@id="F1"]/button')
+		const elements = await page.$x('//*[@id="F1"]/button')
+                 await elements[0].click() 			
+		await page.waitForNavigation({waitUntil: 'networkidle2'});
              const html = await page.content();
             console.log(html);
            res.send(html); } 
