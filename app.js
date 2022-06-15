@@ -35,9 +35,9 @@ app.get('/', function(req, res) {
             res.send(html); 
             await browser.close();
 		   } else {
-		await page.evaluate(() => document.querySelector("#F1 > button").click());
-		await page.$x('//*[@id="F1"]/button')
-		const elements = await page.$x('//*[@id="F1"]/button')
+		await page.evaluate(() => document.querySelector("#best-variant-tab > div:nth-child(1) > ul > li > ul > li > a > div.download-button > svg > use").click());
+		//await page.$x('//*[@id="best-variant-tab"]/div[1]/ul/li/ul/li/a/div[2]/svg/use')
+		//const elements = await page.$x('//*[@id="best-variant-tab"]/div[1]/ul/li/ul/li/a/div[2]/svg/use')
                  await elements[0].click() 			
 		await page.waitForNavigation({waitUntil: 'networkidle2'});
              const html = await page.content();
