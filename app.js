@@ -21,9 +21,9 @@ var parseUrl = function(url) {
 app.get('/', function(req, res) {
     var urlToScreenshot = parseUrl(req.query.url);
      var mode = req.query.mode;
-	const proxy = 'p.webshare.io:80';
-         const username = 'rvrdexbo-rotate';
-       const password = 'wxvj2jonjvri';
+	//const proxy = 'p.webshare.io:80';
+        // const username = 'rvrdexbo-rotate';
+      // const password = 'wxvj2jonjvri';
 	
 	
 	
@@ -32,13 +32,13 @@ app.get('/', function(req, res) {
         (async() => {
             const browser = await puppeteer.launch({
                // args: ['--no-sandbox', '--disable-setuid-sandbox']
-		  args: ['--no-sandbox', '--disable-setuid-sandbox', '--proxy-server=${proxy}']    
+		  args: ['--no-sandbox', '--disable-setuid-sandbox', '--proxy-server=51.158.152.223:3128']    
             });
 
             const page = await browser.newPage();
 		// Authenticate our proxy with username and password defined above
-                  await page.authenticate({ username, password });	
-		await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
+                //  await page.authenticate({ username, password });	
+		//await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
             await page.goto(urlToScreenshot);
 		if ( mode == 'res')  {
              const html = await page.content();
