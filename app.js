@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
-//const puppeteer = require('puppeteer');
-const puppeteer = require('puppeteer-extra')
+const puppeteer = require('puppeteer');
 const port = process.env.PORT || 8080;
 const validUrl = require('valid-url');
 const fs = require("fs");
@@ -14,23 +13,34 @@ var parseUrl = function(url) {
     return url;
 };
 
+
+
+
+
+
 app.get('/', function(req, res) {
     var urlToScreenshot = parseUrl(req.query.url);
      var mode = req.query.mode;
+	const proxy = 'http://p.webshare.io:80';
+         const username = 'rvrdexbo-rotate';
+       const password = 'wxvj2jonjvri';
+	
+	
+	
     if (validUrl.isWebUri(urlToScreenshot)) {
         console.log('Screenshotting: ' + urlToScreenshot);
         (async() => {
             const browser = await puppeteer.launch({
-                args: ['--no-sandbox', '--disable-setuid-sandbox']
+               // args: ['--no-sandbox', '--disable-setuid-sandbox']
+		  args: [`--proxy-server=${proxy}`],    
             });
 
             const page = await browser.newPage();
-            await page.goto(urlToScreenshot);
-			
+		// Authenticate our proxy with username and password defined above
+                  await page.authenticate({ username, password });	
 		await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
-		await page.waitForNavigation({waitUntil: 'networkidle2'});	
-			
-			if ( mode == 'res')  {
+            await page.goto(urlToScreenshot);
+		if ( mode == 'res')  {
              const html = await page.content();
             console.log(html);
             res.send(html); 
