@@ -21,7 +21,7 @@ var parseUrl = function(url) {
 app.get('/', function(req, res) {
     var urlToScreenshot = parseUrl(req.query.url);
      var mode = req.query.mode;
-	const proxy = 'http://p.webshare.io:80';
+	const proxy = 'p.webshare.io:80';
          const username = 'rvrdexbo-rotate';
        const password = 'wxvj2jonjvri';
 	
