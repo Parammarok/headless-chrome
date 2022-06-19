@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const puppeteer = require('puppeteer');
+//const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra')
 const port = process.env.PORT || 8080;
 const validUrl = require('valid-url');
 const fs = require("fs");
@@ -26,8 +27,8 @@ app.get('/', function(req, res) {
             const page = await browser.newPage();
             await page.goto(urlToScreenshot);
 			
-			await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
-			
+		await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
+		await page.waitForNavigation({waitUntil: 'networkidle2'});	
 			
 			if ( mode == 'res')  {
              const html = await page.content();
