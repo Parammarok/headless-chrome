@@ -32,7 +32,7 @@ app.get('/', function(req, res) {
         (async() => {
             const browser = await puppeteer.launch({
                // args: ['--no-sandbox', '--disable-setuid-sandbox']
-		  args: ['--no-sandbox', '--disable-setuid-sandbox', '--proxy-server=p.webshare.io:9999']    
+		  args: ['--no-sandbox', '--disable-setuid-sandbox', '--proxy-server=51.158.152.223:3128']    
             });
 
             const page = await browser.newPage();
