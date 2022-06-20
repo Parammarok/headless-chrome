@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const puppeteer = require('puppeteer');
-//const useProxy = require('puppeteer-page-proxy');
 const port = process.env.PORT || 8080;
 const validUrl = require('valid-url');
 const fs = require("fs");
@@ -34,7 +33,7 @@ app.get('/', function(req, res) {
             const browser = await puppeteer.launch({
                  args: ['--proxy-server=51.158.152.223:3128','--no-sandbox', '--disable-setuid-sandbox']    
             });
-           //await useProxy(page, '51.158.152.223:3128');
+         
             const page = await browser.newPage();
 		//await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
             await page.goto(urlToScreenshot);
@@ -42,8 +41,6 @@ app.get('/', function(req, res) {
 		if ( mode == 'res')  {
              const html = await page.content();
             //console.log(html);
-const data = await useProxy.lookup(page);
-console.log(data.ip);
             res.send(html); 
             await browser.close();
 		   } else {
