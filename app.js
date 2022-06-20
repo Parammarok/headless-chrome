@@ -21,6 +21,7 @@ var parseUrl = function(url) {
 app.get('/', function(req, res) {
     var urlToScreenshot = parseUrl(req.query.url);
      var mode = req.query.mode;
+	var nav = req.query.mode;
 	//const proxy = 'p.webshare.io:80';
         // const username = 'rvrdexbo-rotate';
       // const password = 'wxvj2jonjvri';
@@ -37,7 +38,8 @@ app.get('/', function(req, res) {
             const page = await browser.newPage();
 		//await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
             await page.goto(urlToScreenshot);
-		await page.waitForNavigation({waitUntil: 'networkidle2'});
+		if ( nav == 'true')  {
+		await page.waitForNavigation({waitUntil: 'networkidle2'}); }
 		if ( mode == 'res')  {
              const html = await page.content();
             //console.log(html);
