@@ -14,47 +14,32 @@ var parseUrl = function(url) {
 };
 
 
-
-
-
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
 
 app.get('/', function(req, res) {
     var urlToScreenshot = parseUrl(req.query.url);
-     var mode = req.query.mode;
-	var nav = req.query.mode;
-	//const proxy = 'p.webshare.io:80';
-        // const username = 'rvrdexbo-rotate';
-      // const password = 'wxvj2jonjvri';
-	
-	
-	
+
     if (validUrl.isWebUri(urlToScreenshot)) {
         console.log('Screenshotting: ' + urlToScreenshot);
         (async() => {
             const browser = await puppeteer.launch({
-                 args: ['--proxy-server=51.158.152.223:3128','--no-sandbox', '--disable-setuid-sandbox']    
+                args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
-         
             const page = await browser.newPage();
-		//await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
-            await page.goto(urlToScreenshot);
-		if ( nav == 'true')  {
-		await page.waitForNavigation({waitUntil: 'networkidle2'}); }
-		if ( mode == 'res')  {
-             const html = await page.content();
+            await page.goto(urlToScreenshot, {waitUntil: 'networkidle2'});
+            await page.setViewport({
+            width: 1200,
+            height: 800
+                });   
+                        
+     
+         await page.tracing.start({ categories: ['devtools.timeline'], path: "./tracing.json" });
+         await page.goto(urlToScreenshot);
+         var tracing = JSON.parse(await page.tracing.stop());
             //console.log(html);
-            res.send(html); 
-            await browser.close();
-		   } else {
-		await page.evaluate(() => document.querySelector("#best-variant-tab > div:nth-child(1) > ul > li > ul > li > a > div.download-button > svg > use").click());
-		//await page.$x('//*[@id="best-variant-tab"]/div[1]/ul/li/ul/li/a/div[2]/svg/use')
-		//const elements = await page.$x('//*[@id="best-variant-tab"]/div[1]/ul/li/ul/li/a/div[2]/svg/use')
-                 await elements[0].click() 			
-		await page.waitForNavigation({waitUntil: 'networkidle2'});
-             const html = await page.content();
-            console.log(html);
-           res.send(html); } 
-            
+            res.send(tracing);
             await browser.close();
         })();
     } else {
